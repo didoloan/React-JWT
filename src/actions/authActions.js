@@ -12,4 +12,4 @@ export const loginUser = (tokens) => (
     }
 )
 
-export const logoutUser = (mess='logout') => ({ type:LOGOUT,payload:mess })
+export const logoutUser = () => ({ type:LOGOUT})
