@@ -4,7 +4,7 @@ import {Router, Link} from '@reach/router';
 import Views from './views';
 import Navbar from './components/navbar'
 
-const { Dashboard, Login, Register } = Views;
+const { Dashboard, Login, Register, Forgot } = Views;
 
 function App() {
   return (
@@ -13,6 +13,7 @@ function App() {
       <Router>
         <Login path="/" />
         <Login path="/login" />
+        <Forgot path="/forgot-password" />
         <Register path="/register" />
         <Dashboard path="/dashboard" />
       </Router>

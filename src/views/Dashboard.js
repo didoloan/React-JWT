@@ -29,32 +29,32 @@ const Dashboard = props => {
                 'Authorization': `Bearer ${auth.tokens.access}`
             }
         })
-            .then(res => res.json())
-            .then(res => {
-                console.log(res);
-                if (res.error) {
-                    if (res.error.message === "Token Expired!") {
-                        fetch(`${apiBaseURL}/auth/refresh`, {
-                            method: 'POST',
-                            credentials: 'include',
-                            headers: {
-                                'Content-Type': 'application/json',
-                            },
-                            body: JSON.stringify({ refreshToken: auth.refresh })
+        .then(res => res.json())
+        .then(res => {
+            console.log(res);
+            if (res.error) {
+                if (res.error.message === "Token Expired!") {
+                    fetch(`${apiBaseURL}/auth/refresh`, {
+                        method: 'POST',
+                        credentials: 'include',
+                        headers: {
+                            'Content-Type': 'application/json',
+                        },
+                        body: JSON.stringify({ refreshToken: auth.refresh })
+                    })
+                        .then(res => res.json())
+                        .then(res => {
+                            if (res.error) {
+                                dispatch(logoutUser());
+                            }
+                            loginUser(res);
                         })
-                            .then(res => res.json())
-                            .then(res => {
-                                if (res.error) {
-                                    dispatch(logoutUser());
-                                }
-                                loginUser(res);
-                            })
-                    }
                 }
-                if (res.result) {
-                    setUser(res.result);
-                }
-            })
+            }
+            if (res.result) {
+                setUser(res.result);
+            }
+        })
     }, [auth])
 
     useEffect(() => {

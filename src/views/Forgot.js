@@ -15,18 +15,14 @@ function Alert(props) {
     return <MuiAlert elevation={6} variant="filled" {...props} />;
 }
 
-const Login = props => {
-    const [creds, setCreds] = useState({ email: '', password: '' });
+const Forgot = props => {
+    const [email, setEmail] = useState('');
     const [reserror, setError] = useState({});
     const [load, setLoad] = useState(false);
     const [pasvisi, setpasvisi] = useState(false);
     const dispatch = useDispatch();
     const auth = useSelector(state => state.auth);
 
-    const filled = () => {
-        const { email, password } = creds;
-        return email && password;
-    }
 
     useEffect(() => {
         if (auth.isLoggedIn) {
@@ -34,14 +30,10 @@ const Login = props => {
         }
     }, [])
 
-    const responseGoogle = () => {
-        return;
-    }
 
 
 
-
-    const login = () => {
+    const requestReset = () => {
         setLoad(true);
         console.log('fetching login')
         fetch(`${apiBaseURL}/auth/login`, {
@@ -50,7 +42,7 @@ const Login = props => {
             headers: {
                 'Content-Type': 'application/json'
             },
-            body: JSON.stringify(creds)
+            body: JSON.stringify({email:email})
         })
             .then(res => res.json())
             .then(res => {
@@ -61,8 +53,8 @@ const Login = props => {
                 }
                 if (res.accessToken) {
                     dispatch(loginUser(res));
-                    setCreds({ email: '', password: '' });
-                    navigate('/dashboard');
+                    setEmail('');
+                    navigate('/login');
                 }
             })
             .catch(err => { console.log(err.message); fadeError(err) })
@@ -76,27 +68,26 @@ const Login = props => {
 
     const handleSubmit = e => {
         e.preventDefault();
-        login();
+        requestReset();
     }
 
     const acceptEnter = e => {
         if (e.key === 'Enter') {
-            login();
+            requestReset();
         }
     }
 
     const handleInput = e => {
-        const value = e.target.value;
-        setCreds({ ...creds, [e.target.name]: value });
+        setEmail(e.target.value);
     }
 
     return (
 
         <div style={{ width: 300, margin: 'auto', position: 'relative' }}>
-            <h2>Login</h2>
+            <h2>Input Email to Reset Password</h2>
             <form onSubmit={handleSubmit} style={{ display: 'flex', flexDirection: 'column' }}>
-                <TextField style={{ marginTop: 20 }} placeholder="Email" label="Email" name="email" value={creds.email} onChange={handleInput} variant="filled" />
-                <FilledInput style={{ marginTop: 20 }} type={pasvisi ? "text" : "password"} placeholder="Password" label="Password" name="password" value={creds.password} onChange={handleInput} onKeyPress={acceptEnter} endAdornment={
+                <TextField style={{ marginTop: 20 }} placeholder="Email" label="Email" name="email" value={email} onChange={handleInput} onKeyPress={acceptEnter} variant="filled" />
+                {/* <FilledInput style={{ marginTop: 20 }} type={pasvisi ? "text" : "password"} placeholder="Password" label="Password" name="password" value={creds.password} onChange={handleInput} onKeyPress={acceptEnter} endAdornment={
                     <InputAdornment position="end">
                         <IconButton
                             aria-label="toggle password visibility"
@@ -107,26 +98,10 @@ const Login = props => {
                             {pasvisi ? <Visibility /> : <VisibilityOff />}
                         </IconButton>
                     </InputAdornment>
-                } />
-                <Link style={{textDecoration:'none', alignSelf:'self-end'}} to="/forgot-password">Forgot Password</Link>
-                {filled() ? <Button onClick={handleSubmit} style={{ marginTop: 20, marginBottom: 20, height: 50 }} variant="outlined" color="primary">Login</Button> : <Button onClick={handleSubmit} style={{ marginTop: 20, marginBottom: 20, height: 50 }} variant="outlined" color="primary" disabled>Login</Button>}
+                } /> */}
+                {email ? <Button onClick={handleSubmit} style={{ marginTop: 20, marginBottom: 20, height: 50 }} variant="outlined" color="primary">Submit</Button> : <Button onClick={handleSubmit} style={{ marginTop: 20, marginBottom: 20, height: 50 }} variant="outlined" color="primary" disabled>Submit</Button>}
                 {reserror && <Fade in={reserror.message}><Alert severity="error">{reserror.message}</Alert></Fade>}
             </form>
-            <p>Not yet registered <Link to="/register">Register</Link></p>
-            <GoogleLogin
-                clientId="387852080754-6gfsprtf26hlgpivgnhvfu61e2h4euju.apps.googleusercontent.com"
-                buttonText="Login"
-                onSuccess={responseGoogle}
-                onFailure={responseGoogle}
-                cookiePolicy={'single_host_origin'}
-            />
-            <FacebookLogin
-                appId="2505092879792378"
-                autoLoad={false}
-                fields="name,email,picture"
-                onClick={() => {}}
-                callback={() => {}} 
-            />
             {load && <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', width: '100%', height: '100%', zIndex: 3, backgroundColor: 'ffffffaa', position: 'absolute', top: 0 }}>
                 <CircularProgress />
             </div>}
@@ -134,4 +109,4 @@ const Login = props => {
     );
 }
 
-export default Login;
+export default Forgot;
