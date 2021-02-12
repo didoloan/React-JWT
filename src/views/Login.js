@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import ReactDOM from 'react-dom';
 import { apiBaseURL } from '../app.json';
-import { useDispatch, useSelector, connect } from 'react-redux';
+import { useDispatch, connect } from 'react-redux';
 import { Link, navigate } from '@reach/router';
 import { GoogleLogin } from 'react-google-login';
 import FacebookLogin from 'react-facebook-login';
@@ -20,7 +20,6 @@ const Login = ({isLoggedIn}) => {
     const [load, setLoad] = useState(false);
     const [pasvisi, setpasvisi] = useState(false);
     const dispatch = useDispatch();
-    const auth = useSelector(state => state.auth);
 
     const filled = () => {
         const { email, password } = creds;
