@@ -17,13 +17,12 @@ const Dashboard = ({ isLoggedIn, access, refresh,interests, hobbies }) => {
     const dispatch = useDispatch()
 
     useEffect(() => {
-        console.log(auth);
         if (!isLoggedIn) navigate('/login')
         fetch(`${apiBaseURL}/user`, {
             method: 'GET',
             credentials: 'include',
             headers: {
-                'Authorization': `Bearer ${auth.tokens.access}`
+                'Authorization': `Bearer ${access}`
             }
         })
             .then(res => res.json())
