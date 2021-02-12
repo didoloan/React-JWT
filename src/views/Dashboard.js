@@ -8,7 +8,6 @@ import { logoutUser, loginUser } from '../actions/authActions'
 import { initialiseInterests, addInterests, delInterest } from '../actions/interestActions'
 import { initialiseHobbies, addHobby, delHobby } from '../actions/hobbyActions'
 import { Interests, Hobbies } from '../components/interests';
-// import Hobbies from '../components/hobbies';
 
 const Dashboard = ({ isLoggedIn, access, refresh, interests, hobbies }) => {
 
@@ -18,6 +17,7 @@ const Dashboard = ({ isLoggedIn, access, refresh, interests, hobbies }) => {
 
     useEffect(() => {
         if (!isLoggedIn) navigate('/login')
+        console.log(access);
         fetch(`${apiBaseURL}/user`, {
             method: 'GET',
             credentials: 'include',
@@ -25,32 +25,32 @@ const Dashboard = ({ isLoggedIn, access, refresh, interests, hobbies }) => {
                 'Authorization': `Bearer ${access}`
             }
         })
-            .then(res => res.json())
-            .then(res => {
-                console.log(res);
-                if (res.error) {
-                    if (res.error.message === "Token Expired!") {
-                        fetch(`${apiBaseURL}/auth/refresh`, {
-                            method: 'POST',
-                            credentials: 'include',
-                            headers: {
-                                'Content-Type': 'application/json',
-                            },
-                            body: JSON.stringify({ refreshToken: refresh })
-                        })
-                            .then(res => res.json())
-                            .then(res => {
-                                if (res.error) {
-                                    dispatch(logoutUser());
-                                }
-                                loginUser(res);
-                            })
-                    }
+        .then(res => res.json())
+        .then(res => {
+            console.log(res);
+            if (res.error) {
+                if (res.error.message === "Token Expired!") {
+                    fetch(`${apiBaseURL}/auth/refresh`, {
+                        method: 'POST',
+                        credentials: 'include',
+                        headers: {
+                            'Content-Type': 'application/json',
+                        },
+                        body: JSON.stringify({ refreshToken: refresh })
+                    })
+                    .then(res => res.json())
+                    .then(res => {
+                        if (res.error) {
+                            dispatch(logoutUser());
+                        }
+                        loginUser(res);
+                    })
                 }
-                if (res.result) {
-                    setUser(res.result);
-                }
-            })
+            }
+            if (res.result) {
+                setUser(res.result);
+            }
+        })
     }, [])
 
     useEffect(() => {
