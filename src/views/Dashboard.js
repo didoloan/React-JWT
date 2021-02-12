@@ -10,7 +10,7 @@ import { initialiseHobbies, addHobby, delHobby } from '../actions/hobbyActions'
 import { Interests, Hobbies } from '../components/interests';
 // import Hobbies from '../components/hobbies';
 
-const Dashboard = ({ isLoggedIn, access, refresh,interests, hobbies }) => {
+const Dashboard = ({ isLoggedIn, access, refresh, interests, hobbies }) => {
 
     const [user, setUser] = useState({});
 
@@ -51,7 +51,7 @@ const Dashboard = ({ isLoggedIn, access, refresh,interests, hobbies }) => {
                     setUser(res.result);
                 }
             })
-    }, [isLoggedIn])
+    }, [])
 
     useEffect(() => {
         user.fname && dispatch(initialiseInterests(user.interests))
