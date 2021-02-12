@@ -118,7 +118,7 @@ const Dashboard = ({ isLoggedIn, access, refresh, interests, hobbies }) => {
     return (
         <div>
             <Button onClick={() => logout()}>Logout</Button>
-            <h1 style={{ color: '#645454' }}>Welcome {user.fname ? 'Loading...' : user.fname}</h1>
+            <h1 style={{ color: '#645454' }}>Welcome {user.fname ? user.fname:'Loading...' }</h1>
             {user.email && <Interests interests={interests} add={addInterest} deleteI={deleteInterest} />}
             {user.email && <Hobbies interests={hobbies} add={addHobby} />}
 
