@@ -7,14 +7,6 @@ const interestReducer = (initial=[], action) => {
         case ADD_INTEREST:
             return [...initial, ...action.dataList]
         case REMOVE_INTEREST:
-            // let lsst = []
-            // console.log(action.index)
-            // for(let key in initial){
-            //     if(key!==action.index){
-            //         lsst.push(initial[key])
-            //     }
-            // }
-            // return lsst
             return initial.filter((state, index) => index!==action.data)
         default:
             return initial

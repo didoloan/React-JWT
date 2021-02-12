@@ -7,7 +7,7 @@ const hobbyReducer = (initial=[], action) => {
         case ADD_HOBBY:
             return [...initial, ...action.dataList]
         case DELETE_HOBBY:
-            return initial.filter((state, index) => index!==action.index)
+            return initial.filter((state, index) => index!==action.data)
         default:
             return initial
     }

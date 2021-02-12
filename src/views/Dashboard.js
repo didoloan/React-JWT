@@ -2,26 +2,23 @@ import React, { useEffect, useState } from 'react';
 import ReactDOM from 'react-dom';
 import { Button } from '@material-ui/core';
 import { apiBaseURL } from '../app.json';
-import { useSelector, useDispatch } from 'react-redux';
+import { useDispatch, connect } from 'react-redux';
 import { navigate } from '@reach/router';
 import { logoutUser, loginUser } from '../actions/authActions'
 import { initialiseInterests, addInterests, delInterest } from '../actions/interestActions'
+import { initialiseHobbies, addHobby, delHobby } from '../actions/hobbyActions'
 import { Interests, Hobbies } from '../components/interests';
 // import Hobbies from '../components/hobbies';
 
-const Dashboard = props => {
+const Dashboard = ({isLoggedIn, access, refresh, interests, hobbies}) => {
 
     const [user, setUser] = useState({});
-
-    const auth = useSelector(state => state.auth);
-
-    const interests = useSelector(state => state.interests);
 
     const dispatch = useDispatch()
 
     useEffect(() => {
         console.log(auth);
-        if (!auth.isLoggedIn) navigate('/login')
+        if (!isLoggedIn) navigate('/login')
         fetch(`${apiBaseURL}/user`, {
             method: 'GET',
             credentials: 'include',
@@ -40,7 +37,7 @@ const Dashboard = props => {
                         headers: {
                             'Content-Type': 'application/json',
                         },
-                        body: JSON.stringify({ refreshToken: auth.refresh })
+                        body: JSON.stringify({ refreshToken: refresh })
                     })
                         .then(res => res.json())
                         .then(res => {
@@ -55,7 +52,7 @@ const Dashboard = props => {
                 setUser(res.result);
             }
         })
-    }, [auth])
+    }, [isLoggedIn])
 
     useEffect(() => {
         user.fname && dispatch(initialiseInterests(user.interests))
@@ -71,14 +68,13 @@ const Dashboard = props => {
         valarr.push(val)
         fetch(`${apiBaseURL}/user/hobbies`, {
             method: 'POST',
-            headers: { 'Authorization': `Bearer ${auth.tokens.access}`, 'Content-Type': 'application/json' },
+            headers: { 'Authorization': `Bearer ${access}`, 'Content-Type': 'application/json' },
             body: JSON.stringify({ hobbies: valarr })
         })
             .then(res => res.json())
             .then(res => {
                 if (res.message) {
-                    let old = user
-                    setUser(old.hobbies.push(val))
+                    dispatch(addHobby(valarr));
                 }
             })
     }
@@ -90,7 +86,7 @@ const Dashboard = props => {
         fetch(`${apiBaseURL}/user/interests`, {
             method: 'PATCH',
             credentials: 'include',
-            headers: { 'Authorization': `Bearer ${auth.tokens.access}`, 'Content-Type': 'application/json' },
+            headers: { 'Authorization': `Bearer ${access}`, 'Content-Type': 'application/json' },
             body: JSON.stringify({ interests: valarr })
         })
             .then(res => res.json())
@@ -104,7 +100,7 @@ const Dashboard = props => {
     const deleteInterest = index => {
         fetch(`${apiBaseURL}/user/interests`, {
             method: 'DELETE',
-            headers: { 'Authorization': `Bearer ${auth.tokens.access}`, 'Content-Type': 'application/json' },
+            headers: { 'Authorization': `Bearer ${access}`, 'Content-Type': 'application/json' },
             body: JSON.stringify({ index: index })
         })
             .then(res => res.json())
@@ -120,12 +116,20 @@ const Dashboard = props => {
     return (
         <div>
             <Button onClick={() => logout()}>Logout</Button>
-            <h1 style={{ color: '#645454' }}>Welcome {user.fname}</h1>
+            <h1 style={{ color: '#645454' }}>Welcome {user.fname?'Loading...':user.fname}</h1>
             {user.email && <Interests interests={interests} add={addInterest} deleteI={deleteInterest} />}
-            {user.email && <Hobbies interests={user.hobbies} add={addHobby} />}
+            {user.email && <Hobbies interests={hobbies} add={addHobby} />}
 
         </div>
     );
 }
 
-export default Dashboard;
+const mapState = state => ({
+    isLoggedIn: state.auth.isLoggedIn,
+    access: state.auth.access,
+    refresh: state.auth.refresh,
+    interests: state.interests,
+    hobbies: state.hobbies
+})
+
+export default connect(mapState)(Dashboard);
