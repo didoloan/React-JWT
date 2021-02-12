@@ -27,9 +27,7 @@ const Login = ({isLoggedIn}) => {
     }
 
     useEffect(() => {
-        if (auth.isLoggedIn) {
-            navigate('/dashboard');
-        }
+        if (isLoggedIn) navigate('/dashboard')
     }, [isLoggedIn])
 
     const responseGoogle = () => {
