@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import ReactDOM from 'react-dom';
 import { apiBaseURL } from '../app.json';
-import { useDispatch, useSelector, connect, dispatch } from 'react-redux';
+import { useDispatch, useSelector, connect } from 'react-redux';
 import { Link, navigate } from '@reach/router';
 import { GoogleLogin } from 'react-google-login';
 import FacebookLogin from 'react-facebook-login';
