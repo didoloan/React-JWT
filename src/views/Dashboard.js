@@ -125,8 +125,8 @@ const Dashboard = ({ isLoggedIn, access, refresh, interests, hobbies }) => {
 
 const mapState = state => ({
     isLoggedIn: state.auth.isLoggedIn,
-    access: state.auth.access,
-    refresh: state.auth.refresh,
+    access: state.auth.tokens.access,
+    refresh: state.auth.tokens.refresh,
     interests: state.interests,
     hobbies: state.hobbies
 })
