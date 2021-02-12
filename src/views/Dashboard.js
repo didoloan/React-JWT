@@ -54,7 +54,10 @@ const Dashboard = ({ isLoggedIn, access, refresh, interests, hobbies }) => {
     }, [])
 
     useEffect(() => {
-        user.fname && dispatch(initialiseInterests(user.interests))
+        if(user.fname){
+            dispatch(initialiseInterests(user.interests));
+            dispatch(initialiseHobbies(user.hobbies));
+        }
     }, [user])
 
     const logout = () => {
