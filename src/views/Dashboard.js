@@ -10,7 +10,7 @@ import { initialiseHobbies, addHobby, delHobby } from '../actions/hobbyActions'
 import { Interests, Hobbies } from '../components/interests';
 // import Hobbies from '../components/hobbies';
 
-const Dashboard = ({isLoggedIn, access, refresh, interests, hobbies}) => {
+const Dashboard = ({ isLoggedIn, access, refresh,interests, hobbies }) => {
 
     const [user, setUser] = useState({});
 
@@ -26,32 +26,32 @@ const Dashboard = ({isLoggedIn, access, refresh, interests, hobbies}) => {
                 'Authorization': `Bearer ${auth.tokens.access}`
             }
         })
-        .then(res => res.json())
-        .then(res => {
-            console.log(res);
-            if (res.error) {
-                if (res.error.message === "Token Expired!") {
-                    fetch(`${apiBaseURL}/auth/refresh`, {
-                        method: 'POST',
-                        credentials: 'include',
-                        headers: {
-                            'Content-Type': 'application/json',
-                        },
-                        body: JSON.stringify({ refreshToken: refresh })
-                    })
-                        .then(res => res.json())
-                        .then(res => {
-                            if (res.error) {
-                                dispatch(logoutUser());
-                            }
-                            loginUser(res);
+            .then(res => res.json())
+            .then(res => {
+                console.log(res);
+                if (res.error) {
+                    if (res.error.message === "Token Expired!") {
+                        fetch(`${apiBaseURL}/auth/refresh`, {
+                            method: 'POST',
+                            credentials: 'include',
+                            headers: {
+                                'Content-Type': 'application/json',
+                            },
+                            body: JSON.stringify({ refreshToken: refresh })
                         })
+                            .then(res => res.json())
+                            .then(res => {
+                                if (res.error) {
+                                    dispatch(logoutUser());
+                                }
+                                loginUser(res);
+                            })
+                    }
                 }
-            }
-            if (res.result) {
-                setUser(res.result);
-            }
-        })
+                if (res.result) {
+                    setUser(res.result);
+                }
+            })
     }, [isLoggedIn])
 
     useEffect(() => {
@@ -71,12 +71,12 @@ const Dashboard = ({isLoggedIn, access, refresh, interests, hobbies}) => {
             headers: { 'Authorization': `Bearer ${access}`, 'Content-Type': 'application/json' },
             body: JSON.stringify({ hobbies: valarr })
         })
-            .then(res => res.json())
-            .then(res => {
-                if (res.message) {
-                    dispatch(addHobby(valarr));
-                }
-            })
+        .then(res => res.json())
+        .then(res => {
+            if (res.message) {
+                dispatch(addHobby(valarr));
+            }
+        })
     }
 
     const addInterest = (val) => {
@@ -89,12 +89,12 @@ const Dashboard = ({isLoggedIn, access, refresh, interests, hobbies}) => {
             headers: { 'Authorization': `Bearer ${access}`, 'Content-Type': 'application/json' },
             body: JSON.stringify({ interests: valarr })
         })
-            .then(res => res.json())
-            .then(res => {
-                if (res.message) {
-                    dispatch(addInterests(valarr));
-                }
-            })
+        .then(res => res.json())
+        .then(res => {
+            if (res.message) {
+                dispatch(addInterests(valarr));
+            }
+        })
     }
 
     const deleteInterest = index => {
@@ -116,7 +116,7 @@ const Dashboard = ({isLoggedIn, access, refresh, interests, hobbies}) => {
     return (
         <div>
             <Button onClick={() => logout()}>Logout</Button>
-            <h1 style={{ color: '#645454' }}>Welcome {user.fname?'Loading...':user.fname}</h1>
+            <h1 style={{ color: '#645454' }}>Welcome {user.fname ? 'Loading...' : user.fname}</h1>
             {user.email && <Interests interests={interests} add={addInterest} deleteI={deleteInterest} />}
             {user.email && <Hobbies interests={hobbies} add={addHobby} />}
 
