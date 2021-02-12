@@ -65,7 +65,7 @@ const Dashboard = ({ isLoggedIn, access, refresh, interests, hobbies }) => {
         navigate('/login');
     }
 
-    const addHobby = val => {
+    const addHobbies = val => {
         let valarr = []
         valarr.push(val)
         fetch(`${apiBaseURL}/user/hobbies`, {
@@ -120,7 +120,7 @@ const Dashboard = ({ isLoggedIn, access, refresh, interests, hobbies }) => {
             <Button onClick={() => logout()}>Logout</Button>
             <h1 style={{ color: '#645454' }}>Welcome {user.fname ? user.fname:'Loading...' }</h1>
             {user.email && <Interests interests={interests} add={addInterest} deleteI={deleteInterest} />}
-            {user.email && <Hobbies interests={hobbies} add={addHobby} />}
+            {user.email && <Hobbies interests={hobbies} add={addHobbies} />}
 
         </div>
     );
