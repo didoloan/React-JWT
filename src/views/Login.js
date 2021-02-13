@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import ReactDOM from 'react-dom';
 import { apiBaseURL } from '../app.json';
-import { useDispatch, connect } from 'react-redux';
+import { connect, dispatch } from 'react-redux';
 import { Link, navigate } from '@reach/router';
 import { GoogleLogin } from 'react-google-login';
 import FacebookLogin from 'react-facebook-login';
@@ -14,12 +14,12 @@ function Alert(props) {
     return <MuiAlert elevation={6} variant="filled" {...props} />;
 }
 
-const Login = ({isLoggedIn}) => {
+const Login = ({isLoggedIn, loginNow}) => {
     const [creds, setCreds] = useState({ email: '', password: '' });
     const [reserror, setError] = useState({});
     const [load, setLoad] = useState(false);
     const [pasvisi, setpasvisi] = useState(false);
-    const dispatch = useDispatch();
+    // const dispatch = useDispatch();
 
     const filled = () => {
         const { email, password } = creds;
@@ -56,9 +56,8 @@ const Login = ({isLoggedIn}) => {
                     fadeError(res.error);
                 }
                 if (res.accessToken) {
-                    dispatch(loginUser(res));
+                    loginNow(res);
                     setCreds({ email: '', password: '' });
-                    // navigate('/dashboard');
                 }
             })
             .catch(err => { console.log(err.message); fadeError(err) })
@@ -142,6 +141,8 @@ const mapState = (state) => ({
     isLoggedIn: state.auth.isLoggedIn
 })
 
-// const mapDispatch = ()
+const mapDispatch = dispatch => ({
+    loginNow: res => dispatch(loginUser(res))
+})
 
-export default connect(mapState)(Login);
+export default connect(mapState, mapDispatch)(Login);

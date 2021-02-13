@@ -9,15 +9,14 @@ import { initialiseInterests, addInterests, delInterest } from '../actions/inter
 import { initialiseHobbies, addHobby, delHobby } from '../actions/hobbyActions'
 import { Interests, Hobbies } from '../components/interests';
 
-const Dashboard = ({ isLoggedIn, access, refresh, interests, hobbies }) => {
+const Dashboard = ({ isLoggedIn, access, refresh, interests, hobbies, initHobbies, initInterests, addHob, addInt, logoutNow }) => {
 
     const [user, setUser] = useState({});
 
-    const dispatch = useDispatch()
+    // const dispatch = useDispatch()
 
     useEffect(() => {
         if (!isLoggedIn) navigate('/login')
-        console.log(access);
         fetch(`${apiBaseURL}/user`, {
             method: 'GET',
             credentials: 'include',
@@ -27,7 +26,6 @@ const Dashboard = ({ isLoggedIn, access, refresh, interests, hobbies }) => {
         })
         .then(res => res.json())
         .then(res => {
-            console.log(res);
             if (res.error) {
                 if (res.error.message === "Token Expired!") {
                     fetch(`${apiBaseURL}/auth/refresh`, {
@@ -41,9 +39,9 @@ const Dashboard = ({ isLoggedIn, access, refresh, interests, hobbies }) => {
                     .then(res => res.json())
                     .then(res => {
                         if (res.error) {
-                            dispatch(logoutUser());
+                            logoutNow();
                         }
-                        loginUser(res);
+                        loginNow(res);
                     })
                 }
             }
@@ -55,13 +53,13 @@ const Dashboard = ({ isLoggedIn, access, refresh, interests, hobbies }) => {
 
     useEffect(() => {
         if(user.fname){
-            dispatch(initialiseInterests(user.interests));
-            dispatch(initialiseHobbies(user.hobbies));
+            initInterests(user.interests);
+            initHobbies(user.hobbies);
         }
     }, [user])
 
     const logout = () => {
-        dispatch(logoutUser());
+        logoutNow();
         navigate('/login');
     }
 
@@ -76,7 +74,7 @@ const Dashboard = ({ isLoggedIn, access, refresh, interests, hobbies }) => {
         .then(res => res.json())
         .then(res => {
             if (res.message) {
-                dispatch(addHobby(valarr));
+                addHob(valarr);
             }
         })
     }
@@ -94,7 +92,7 @@ const Dashboard = ({ isLoggedIn, access, refresh, interests, hobbies }) => {
         .then(res => res.json())
         .then(res => {
             if (res.message) {
-                dispatch(addInterests(valarr));
+                addInt(valarr);
             }
         })
     }
@@ -108,7 +106,7 @@ const Dashboard = ({ isLoggedIn, access, refresh, interests, hobbies }) => {
             .then(res => res.json())
             .then(res => {
                 if (res.message = 'Interest deleted successfully!') {
-                    dispatch(delInterest(index));
+                    delInt(index);
                 }
             })
     }
@@ -134,4 +132,14 @@ const mapState = state => ({
     hobbies: state.hobbies
 })
 
-export default connect(mapState)(Dashboard);
+const mapDispatch = dispatch => ({
+    initInterests: values => dispatch(initialiseHobbies(values)),
+    initHobbies: values => dispatch(initialiseHobbies(values)),
+    loginNow: res => dispatch(loginUser(res)),
+    logoutNow: () => dispatch(logoutUser),
+    addHob: values => dispatch(addHobby(values)),
+    addInt: values => dispatch(addInterests(values)),
+    delInt: index => dispatch(delInterest(index))
+})
+
+export default connect(mapState, mapDispatch)(Dashboard);
