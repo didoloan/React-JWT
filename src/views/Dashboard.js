@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import ReactDOM from 'react-dom';
 import { Button } from '@material-ui/core';
 import { apiBaseURL } from '../app.json';
-import { useDispatch, connect } from 'react-redux';
+import { connect, dispatch } from 'react-redux';
 import { navigate } from '@reach/router';
 import { logoutUser, loginUser } from '../actions/authActions'
 import { initialiseInterests, addInterests, delInterest } from '../actions/interestActions'
