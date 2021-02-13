@@ -51,7 +51,7 @@ const Dashboard = ({ isLoggedIn, access, refresh, interests, hobbies }) => {
                 setUser(res.result);
             }
         })
-    }, [])
+    }, [isLoggedIn])
 
     useEffect(() => {
         if(user.fname){
