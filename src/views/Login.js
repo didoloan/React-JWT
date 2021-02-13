@@ -105,7 +105,7 @@ const Login = ({isLoggedIn, loginNow}) => {
                 } />
                 <Link style={{textDecoration:'none', alignSelf:'self-end'}} to="/forgot-password">Forgot Password</Link>
                 {filled() ? <Button onClick={handleSubmit} style={{ marginTop: 20, marginBottom: 20, height: 50 }} variant="outlined" color="primary">Login</Button> : <Button onClick={handleSubmit} style={{ marginTop: 20, marginBottom: 20, height: 50 }} variant="outlined" color="primary" disabled>Login</Button>}
-                {reserror && <Fade in={reserror.message}><Alert severity="error">{reserror.message}</Alert></Fade>}
+                {reserror.message && <Fade in={reserror.message}><Alert severity="error">{reserror.message}</Alert></Fade>}
             </form>
             <p>Not yet registered <Link to="/register">Register</Link></p>
             <GoogleLogin
