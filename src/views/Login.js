@@ -30,8 +30,8 @@ const Login = ({isLoggedIn, loginNow}) => {
         if (isLoggedIn) navigate('/dashboard')
     }, [isLoggedIn])
 
-    const responseGoogle = () => {
-        return;
+    const responseGoogle = response => {
+        console.log(response);
     }
 
 
