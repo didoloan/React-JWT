@@ -9,7 +9,7 @@ import { initialiseInterests, addInterests, delInterest } from '../actions/inter
 import { initialiseHobbies, addHobby, delHobby } from '../actions/hobbyActions'
 import { Interests, Hobbies } from '../components/interests';
 
-const Dashboard = ({ isLoggedIn, access, refresh, interests, hobbies, initHobbies, initInterests, addHob, addInt, logoutNow }) => {
+const Dashboard = ({ isLoggedIn, access, refresh, interests, hobbies, initHobbies, initInterests, addHob, addInt, delInt, loginNow, logoutNow }) => {
 
     const [user, setUser] = useState({});
 
