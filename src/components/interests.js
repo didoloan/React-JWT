@@ -81,10 +81,11 @@ export const Hobbies = ({interests, add}) => {
     return (
         <div>
             <h2>Hobbies</h2>
-            <div style={{width: 300, display:'flex', margin:'auto', flexFlow:'row wrap'}}>
+            <TextField style={{alignSelf:'flex-start', textAlign:'center'}} type="text" placeholder="Add new Hobby" onChange={handleInput} onKeyPress={handleEnter} value={newI} />
+            <div style={{width: 300, display:'flex', margin:'auto', flexFlow:'row wrap', justifyContent:'center'}}>
                 {interests.map((interest,index) => <Chip icon={<FaceIcon />} label={interest} key={index} onDelete={() => handleDelete(index)} deleteIcon={<DeleteIcon/>} className={classes.chip} />)}
             </div>
-            <TextField type="text" placeholder="Add new Hobby" onChange={handleInput} onKeyPress={handleEnter} value={newI} />
+            
         </div>
         
     );
